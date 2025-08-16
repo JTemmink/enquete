@@ -1,135 +1,112 @@
-'use client';
+'use client'
 
-import { useRouter } from 'next/navigation';
-import { useEnquete } from '@/contexts/EnqueteContext';
-import { useState } from 'react';
+import { useEnquete } from '@/contexts/EnqueteContext'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import Button from '@/components/Button'
+import QuestionWrapper from '@/components/QuestionWrapper'
+import { supabase } from '@/lib/supabaseClient'
+
+interface ContactForm {
+  voornaam: string
+  achternaam: string
+  email: string
+  telefoon: string
+}
 
 export default function Vraag6() {
-  const router = useRouter();
-  const { antwoorden, updateAnswer } = useEnquete();
-  const [formData, setFormData] = useState({
-    voornaam: '',
-    achternaam: '',
-    email: '',
-    telefoon: '',
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { antwoorden, updateAnswer } = useEnquete()
+  const router = useRouter()
+  const { register, handleSubmit, formState: { errors } } = useForm<ContactForm>()
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!formData.voornaam.trim()) {
-      newErrors.voornaam = 'Voornaam is verplicht';
-    }
-    
-    if (!formData.achternaam.trim()) {
-      newErrors.achternaam = 'Achternaam is verplicht';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is verplicht';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Voer een geldig emailadres in';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const onSubmit = async (data: ContactForm) => {
+    try {
+      // Update alle antwoorden met contactgegevens
+      const completeAntwoorden = {
+        ...antwoorden,
+        voornaam: data.voornaam,
+        achternaam: data.achternaam,
+        email: data.email,
+        telefoon: data.telefoon || null
+      }
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-    
-    // Update context
-    updateAnswer(field as keyof typeof antwoorden, value);
-    
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: '',
-      }));
-    }
-  };
+      // Sla op in Supabase
+      const { error } = await supabase
+        .from('enquete_antwoorden')
+        .insert([completeAntwoorden])
 
-  const handleVerzenden = () => {
-    if (validateForm()) {
-      // Alle antwoorden zijn al opgeslagen in context
-      router.push('/enquete/bedankt');
+      if (error) {
+        alert('Er is een fout opgetreden bij het opslaan van je antwoorden. Probeer het opnieuw.')
+        console.error('Supabase error:', error)
+        return
+      }
+
+      // Navigeer naar bedankt pagina
+      router.push('/enquete/bedankt')
+    } catch (error) {
+      alert('Er is een fout opgetreden. Probeer het opnieuw.')
+      console.error('Error:', error)
     }
-  };
+  }
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <h1 className="text-xl font-semibold mb-6 text-gray-800">
-        Nu heb ik alleen uw contactgegevens nog nodig, we zullen alleen contact opnemen als we van start gaan of om uw eventuele vragen te beantwoorden.
-      </h1>
-      
-      <div className="w-full space-y-4 mb-6">
+    <QuestionWrapper question="Nu heb ik alleen uw contactgegevens nog nodig, we zullen alleen contact opnemen als we van start gaan of om uw eventuele vragen te beantwoorden.">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Voornaam *</label>
           <input
             type="text"
-            placeholder="Voornaam *"
-            value={formData.voornaam}
-            onChange={(e) => handleInputChange('voornaam', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg text-center ${
-              errors.voornaam ? 'border-red-500' : 'border-gray-300'
-            }`}
+            {...register('voornaam', { required: 'Voornaam is verplicht' })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors.voornaam && (
-            <p className="text-red-500 text-sm mt-1">{errors.voornaam}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.voornaam.message}</p>
           )}
         </div>
-        
+
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Achternaam *</label>
           <input
             type="text"
-            placeholder="Achternaam *"
-            value={formData.achternaam}
-            onChange={(e) => handleInputChange('achternaam', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg text-center ${
-              errors.achternaam ? 'border-red-500' : 'border-gray-300'
-            }`}
+            {...register('achternaam', { required: 'Achternaam is verplicht' })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors.achternaam && (
-            <p className="text-red-500 text-sm mt-1">{errors.achternaam}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.achternaam.message}</p>
           )}
         </div>
-        
+
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Emailadres *</label>
           <input
             type="email"
-            placeholder="Emailadres *"
-            value={formData.email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
-            className={`w-full px-4 py-3 border rounded-lg text-center ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
-            }`}
+            {...register('email', { 
+              required: 'Email is verplicht',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Voer een geldig emailadres in'
+              }
+            })}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
-        
+
         <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Telefoonnummer (optioneel)</label>
           <input
             type="tel"
-            placeholder="Telefoonnummer (optioneel)"
-            value={formData.telefoon}
-            onChange={(e) => handleInputChange('telefoon', e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center"
+            {...register('telefoon')}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-      </div>
-      
-      <button
-        onClick={handleVerzenden}
-        className="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors min-h-[48px] w-full"
-      >
-        Verzenden
-      </button>
-    </div>
-  );
+
+        <Button type="submit" className="w-full">
+          Verzenden
+        </Button>
+      </form>
+    </QuestionWrapper>
+  )
 }
