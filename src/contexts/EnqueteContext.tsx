@@ -1,28 +1,25 @@
-'use client';
+'use client'
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 interface EnqueteAntwoorden {
-  interesse: boolean | null;
-  bestellingen: Record<string, number> | null;
-  tijd: string | null;
-  straat: string | null;
-  huisnummer: number | null;
-  voornaam: string;
-  achternaam: string;
-  email: string;
-  telefoon: string | null;
+  interesse: boolean | null
+  bestellingen: Record<string, number> | null
+  tijd: string | null
+  straat: string | null
+  huisnummer: number | null
+  voornaam: string
+  achternaam: string
+  email: string
+  telefoon: string | null
 }
 
 interface EnqueteContextType {
-  antwoorden: EnqueteAntwoorden;
-  updateAnswer: (field: keyof EnqueteAntwoorden, value: any) => void;
-  resetAntwoorden: () => void;
+  antwoorden: EnqueteAntwoorden
+  updateAnswer: (field: keyof EnqueteAntwoorden, value: EnqueteAntwoorden[keyof EnqueteAntwoorden]) => void
 }
 
-const EnqueteContext = createContext<EnqueteContextType | undefined>(undefined);
-
-const initialAntwoorden: EnqueteAntwoorden = {
+const defaultAntwoorden: EnqueteAntwoorden = {
   interesse: null,
   bestellingen: null,
   tijd: null,
@@ -31,34 +28,32 @@ const initialAntwoorden: EnqueteAntwoorden = {
   voornaam: '',
   achternaam: '',
   email: '',
-  telefoon: null,
-};
+  telefoon: null
+}
+
+const EnqueteContext = createContext<EnqueteContextType | undefined>(undefined)
 
 export function EnqueteProvider({ children }: { children: ReactNode }) {
-  const [antwoorden, setAntwoorden] = useState<EnqueteAntwoorden>(initialAntwoorden);
+  const [antwoorden, setAntwoorden] = useState<EnqueteAntwoorden>(defaultAntwoorden)
 
-  const updateAnswer = (field: keyof EnqueteAntwoorden, value: any) => {
+  const updateAnswer = (field: keyof EnqueteAntwoorden, value: EnqueteAntwoorden[keyof EnqueteAntwoorden]) => {
     setAntwoorden(prev => ({
       ...prev,
-      [field]: value,
-    }));
-  };
-
-  const resetAntwoorden = () => {
-    setAntwoorden(initialAntwoorden);
-  };
+      [field]: value
+    }))
+  }
 
   return (
-    <EnqueteContext.Provider value={{ antwoorden, updateAnswer, resetAntwoorden }}>
+    <EnqueteContext.Provider value={{ antwoorden, updateAnswer }}>
       {children}
     </EnqueteContext.Provider>
-  );
+  )
 }
 
 export function useEnquete() {
-  const context = useContext(EnqueteContext);
+  const context = useContext(EnqueteContext)
   if (context === undefined) {
-    throw new Error('useEnquete must be used within an EnqueteProvider');
+    throw new Error('useEnquete must be used within an EnqueteProvider')
   }
-  return context;
+  return context
 }
