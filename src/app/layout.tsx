@@ -1,49 +1,46 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import Image from "next/image";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import Image from 'next/image'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "Bakker aan de Deur - Enquête",
-  description: "Enquête voor thuisgebracht ontbijt, brunch of lunch van de bakker",
-};
+  title: 'Bakkeraandedeur - Enquête',
+  description: 'Help jij mee dit mogelijk te maken? Vul dan deze enquête in!',
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
+  // Check if Supabase environment variables are available
+  const hasSupabaseConfig = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
   return (
     <html lang="nl">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-primaryBg min-h-screen flex flex-col items-center justify-center`}
-      >
-        <div className="w-full max-w-md mx-auto p-4">
-          <div className="flex justify-center mb-6">
-            <Image 
-              src="/images/bakkeraandedeurlogo.png" 
-              alt="Bakker aan de Deur Logo" 
-              width={200} 
-              height={100}
-              className="mb-4"
-            />
-          </div>
+      <body className={`${inter.className} bg-primaryBg min-h-screen flex flex-col items-center justify-center`}>
+        <div className="max-w-md mx-auto p-4 flex flex-col items-center">
+          <Image 
+            src="/images/bakkeraandedeurlogo.png" 
+            alt="Bakkeraandedeur Logo" 
+            width={200} 
+            height={100}
+            priority
+          />
+          
+          {!hasSupabaseConfig && (
+            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+              <strong>Configuratie Waarschuwing:</strong> Supabase environment variables zijn niet ingesteld.
+              <br />
+              <small>De enquête functionaliteit werkt mogelijk niet correct.</small>
+            </div>
+          )}
+          
           {children}
         </div>
       </body>
     </html>
-  );
+  )
 }
