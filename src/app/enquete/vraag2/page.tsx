@@ -1,65 +1,103 @@
-'use client';
+'use client'
 
-import { useRouter } from 'next/navigation';
-import { useEnquete } from '@/contexts/EnqueteContext';
-import { useState } from 'react';
+import { useEnquete } from '@/contexts/EnqueteContext'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import Button from '@/components/Button'
+import QuestionWrapper from '@/components/QuestionWrapper'
+
+interface BestellingenForm {
+  croissant: number
+  stokbrood: number
+  pistolet: number
+  halfBrood: number
+  hardeBroodjes: number
+  zachteBroodjes: number
+}
 
 export default function Vraag2() {
-  const router = useRouter();
-  const { antwoorden, updateAnswer } = useEnquete();
-  const [bestellingen, setBestellingen] = useState({
-    croissant: 0,
-    stokbrood: 0,
-    pistolet: 0,
-    halfBrood: 0,
-    hardeBroodjes: 0,
-    zachteBroodjes: 0,
-  });
+  const { updateAnswer } = useEnquete()
+  const router = useRouter()
+  const { register, handleSubmit, formState: { errors } } = useForm<BestellingenForm>({
+    defaultValues: {
+      croissant: 0,
+      stokbrood: 0,
+      pistolet: 0,
+      halfBrood: 0,
+      hardeBroodjes: 0,
+      zachteBroodjes: 0
+    }
+  })
 
-  const handleInputChange = (product: string, value: number) => {
-    setBestellingen(prev => ({
-      ...prev,
-      [product]: Math.max(0, value),
-    }));
-  };
-
-  const handleVolgende = () => {
-    updateAnswer('bestellingen', bestellingen);
-    router.push('/enquete/vraag3');
-  };
+  const onSubmit = (data: BestellingenForm) => {
+    updateAnswer('bestellingen', data)
+    router.push('/enquete/vraag3')
+  }
 
   return (
-    <div className="flex flex-col items-center text-center">
-      <h1 className="text-xl font-semibold mb-6 text-gray-800">
-        Geef een schatting wat u verwacht te bestellen voor ontbijt, brunch of lunch?
-      </h1>
-      
-      <div className="w-full space-y-4 mb-6">
-        {Object.entries(bestellingen).map(([product, amount]) => (
-          <div key={product} className="flex items-center justify-between">
-            <label className="text-gray-700 capitalize">
-              {product === 'halfBrood' ? 'Half brood' : 
-               product === 'hardeBroodjes' ? 'Harde broodjes' :
-               product === 'zachteBroodjes' ? 'Zachte broodjes' :
-               product}
-            </label>
+    <QuestionWrapper question="Geef een schatting wat u verwacht te bestellen voor ontbijt, brunch of lunch?">
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Croissant</label>
             <input
               type="number"
               min="0"
-              value={amount}
-              onChange={(e) => handleInputChange(product, parseInt(e.target.value) || 0)}
-              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center"
+              {...register('croissant', { valueAsNumber: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-        ))}
-      </div>
-      
-      <button
-        onClick={handleVolgende}
-        className="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors min-h-[48px] w-full"
-      >
-        Volgende
-      </button>
-    </div>
-  );
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Stokbrood</label>
+            <input
+              type="number"
+              min="0"
+              {...register('stokbrood', { valueAsNumber: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Pistolet</label>
+            <input
+              type="number"
+              min="0"
+              {...register('pistolet', { valueAsNumber: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Half Brood</label>
+            <input
+              type="number"
+              min="0"
+              {...register('halfBrood', { valueAsNumber: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Harde Broodjes</label>
+            <input
+              type="number"
+              min="0"
+              {...register('hardeBroodjes', { valueAsNumber: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Zachte Broodjes</label>
+            <input
+              type="number"
+              min="0"
+              {...register('zachteBroodjes', { valueAsNumber: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+        
+        <Button type="submit" className="w-full">
+          Volgende
+        </Button>
+      </form>
+    </QuestionWrapper>
+  )
 }
