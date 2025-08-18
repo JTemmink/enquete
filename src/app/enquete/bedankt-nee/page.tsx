@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useEnquete } from '@/contexts/EnqueteContext';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase, isSupabaseAvailable } from '@/lib/supabaseClient';
 
 export default function BedanktNee() {
   const { antwoorden } = useEnquete();
@@ -11,13 +11,13 @@ export default function BedanktNee() {
 
   useEffect(() => {
     const saveAnswer = async () => {
-      if (!antwoorden.interesse) return;
+      if (!antwoorden.interesse || !isSupabaseAvailable()) return;
       
       setIsLoading(true);
       setError(null);
       
       try {
-        const { error: supabaseError } = await supabase
+        const { error: supabaseError } = await supabase!
           .from('enquete_antwoorden')
           .insert({
             interesse: false,

@@ -16,7 +16,7 @@ interface EnqueteAntwoorden {
 
 interface EnqueteContextType {
   antwoorden: EnqueteAntwoorden;
-  updateAnswer: (field: keyof EnqueteAntwoorden, value: any) => void;
+  updateAnswer: (field: keyof EnqueteAntwoorden, value: EnqueteAntwoorden[keyof EnqueteAntwoorden]) => void;
   resetAntwoorden: () => void;
 }
 
@@ -37,7 +37,7 @@ const initialAntwoorden: EnqueteAntwoorden = {
 export function EnqueteProvider({ children }: { children: ReactNode }) {
   const [antwoorden, setAntwoorden] = useState<EnqueteAntwoorden>(initialAntwoorden);
 
-  const updateAnswer = (field: keyof EnqueteAntwoorden, value: any) => {
+  const updateAnswer = (field: keyof EnqueteAntwoorden, value: EnqueteAntwoorden[keyof EnqueteAntwoorden]) => {
     setAntwoorden(prev => ({
       ...prev,
       [field]: value,

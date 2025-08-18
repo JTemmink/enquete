@@ -67,3 +67,4 @@ Ga naar je Supabase dashboard > Table Editor > enquete_antwoorden om te zien of 
 - **"RLS policy violation"**: Controleer of je de policy hebt aangemaakt
 - **CORS errors**: Controleer of je de juiste URL gebruikt
 
+

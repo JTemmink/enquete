@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function Vraag6() {
   const router = useRouter();
-  const { antwoorden, updateAnswer } = useEnquete();
+  const { updateAnswer } = useEnquete();
   const [formData, setFormData] = useState({
     voornaam: '',
     achternaam: '',
@@ -43,7 +43,9 @@ export default function Vraag6() {
     }));
     
     // Update context
-    updateAnswer(field as keyof typeof antwoorden, value);
+    if (field === 'voornaam' || field === 'achternaam' || field === 'email' || field === 'telefoon') {
+      updateAnswer(field, value);
+    }
     
     // Clear error when user starts typing
     if (errors[field]) {

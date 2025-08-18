@@ -6,7 +6,7 @@ import { useState } from 'react';
 
 export default function Vraag2() {
   const router = useRouter();
-  const { antwoorden, updateAnswer } = useEnquete();
+  const { updateAnswer } = useEnquete();
   const [bestellingen, setBestellingen] = useState({
     croissant: 0,
     stokbrood: 0,
