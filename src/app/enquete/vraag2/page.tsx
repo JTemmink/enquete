@@ -51,14 +51,14 @@ export default function Vraag2() {
                product}
             </label>
             <input
-              type="number"
+              type="text"
               min="0"
               max="99"
               step="1"
-              value={amount}
+              value={bestellingen[product]}
               onChange={(e) => handleInputChange(product, parseInt(e.target.value) || 0)}
               onFocus={handleFocus}
-              className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg"
+              className="w-20 px-4 py-3 border border-gray-300 rounded-lg text-center text-lg"
               inputMode="numeric"
               pattern="[0-9]*"
             />

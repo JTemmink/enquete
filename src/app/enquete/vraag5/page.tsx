@@ -32,6 +32,14 @@ export default function Vraag5() {
     }
   };
 
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    // Als het veld leeg is na blur, reset dan de state
+    if (event.target.value === '') {
+      setHuisnummer('');
+      updateAnswer('huisnummer', null);
+    }
+  };
+
   const handleVolgende = () => {
     if (antwoorden.huisnummer) {
       router.push('/enquete/vraag6');
@@ -46,13 +54,14 @@ export default function Vraag5() {
       
       <div className="w-full mb-6">
         <input
-          type="number"
+          type="text"
           min="1"
           max="9999"
           step="1"
           value={huisnummer}
           onChange={(e) => handleInputChange(e.target.value)}
           onFocus={handleFocus}
+          onBlur={handleBlur}
           placeholder="Voer huisnummer in"
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg"
           inputMode="numeric"
