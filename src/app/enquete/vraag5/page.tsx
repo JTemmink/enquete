@@ -20,6 +20,11 @@ export default function Vraag5() {
     }
   };
 
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    // Selecteer automatisch alle tekst wanneer je op het veld klikt
+    event.target.select();
+  };
+
   const handleVolgende = () => {
     if (antwoorden.huisnummer) {
       router.push('/enquete/vraag6');
@@ -36,10 +41,15 @@ export default function Vraag5() {
         <input
           type="number"
           min="1"
+          max="9999"
+          step="1"
           value={huisnummer}
           onChange={(e) => handleInputChange(e.target.value)}
+          onFocus={handleFocus}
           placeholder="Voer huisnummer in"
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg"
+          inputMode="numeric"
+          pattern="[0-9]*"
         />
       </div>
       
