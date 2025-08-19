@@ -7,22 +7,29 @@ import { useState } from 'react';
 export default function Vraag5() {
   const router = useRouter();
   const { antwoorden, updateAnswer } = useEnquete();
-  const [huisnummer, setHuisnummer] = useState<number | ''>('');
+  const [huisnummer, setHuisnummer] = useState<string>('');
 
   const handleInputChange = (value: string) => {
-    const num = parseInt(value);
-    if (!isNaN(num) && num > 0) {
-      setHuisnummer(num);
-      updateAnswer('huisnummer', num);
-    } else {
+    if (value === '') {
       setHuisnummer('');
       updateAnswer('huisnummer', null);
+    } else {
+      const num = parseInt(value);
+      if (!isNaN(num) && num > 0) {
+        setHuisnummer(value);
+        updateAnswer('huisnummer', num);
+      } else {
+        setHuisnummer(value);
+        updateAnswer('huisnummer', null);
+      }
     }
   };
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     // Selecteer automatisch alle tekst wanneer je op het veld klikt
-    event.target.select();
+    if (event.target.value) {
+      event.target.select();
+    }
   };
 
   const handleVolgende = () => {

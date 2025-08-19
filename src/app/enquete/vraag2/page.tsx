@@ -23,6 +23,13 @@ export default function Vraag2() {
     }));
   };
 
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    // Selecteer automatisch alle tekst wanneer je op het veld klikt
+    if (event.target.value) {
+      event.target.select();
+    }
+  };
+
   const handleVolgende = () => {
     updateAnswer('bestellingen', bestellingen);
     router.push('/enquete/vraag3');
@@ -50,6 +57,7 @@ export default function Vraag2() {
               step="1"
               value={amount}
               onChange={(e) => handleInputChange(product, parseInt(e.target.value) || 0)}
+              onFocus={handleFocus}
               className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-center text-lg"
               inputMode="numeric"
               pattern="[0-9]*"
