@@ -5,13 +5,14 @@ import { useEnquete } from '@/contexts/EnqueteContext';
 import { supabase, isSupabaseAvailable } from '@/lib/supabaseClient';
 
 export default function Bedankt() {
-  const { antwoorden } = useEnquete();
+  const { antwoorden, isSubmitted, setSubmitted } = useEnquete();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const saveAllAnswers = async () => {
-      if (!antwoorden.interesse || !isSupabaseAvailable()) return;
+      // Voorkom dubbele submits
+      if (isSubmitted || !antwoorden.interesse || !isSupabaseAvailable()) return;
       
       setIsLoading(true);
       setError(null);
@@ -33,7 +34,14 @@ export default function Bedankt() {
 
         if (supabaseError) {
           console.error('Supabase error:', supabaseError);
-          setError('Er is een fout opgetreden bij het opslaan van uw antwoorden.');
+          if (supabaseError.code === '23505') {
+            setError('U heeft deze enquête al ingevuld. Bedankt voor uw interesse!');
+          } else {
+            setError('Er is een fout opgetreden bij het opslaan van uw antwoorden.');
+          }
+        } else {
+          // Markeer als succesvol opgeslagen
+          setSubmitted(true);
         }
       } catch (err) {
         console.error('Error saving answers:', err);
@@ -44,7 +52,7 @@ export default function Bedankt() {
     };
 
     saveAllAnswers();
-  }, [antwoorden]);
+  }, [antwoorden, isSubmitted, setSubmitted]);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -70,6 +78,10 @@ export default function Bedankt() {
       
       {error && (
         <p className="text-red-600">{error}</p>
+      )}
+      
+      {isSubmitted && !error && (
+        <p className="text-green-600">Uw antwoorden zijn succesvol opgeslagen!</p>
       )}
     </div>
   );

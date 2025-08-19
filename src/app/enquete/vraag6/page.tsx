@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import { useState } from 'react';
+import { supabase, isSupabaseAvailable } from '@/lib/supabaseClient';
 
 export default function Vraag6() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function Vraag6() {
     telefoon: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isCheckingEmail, setIsCheckingEmail] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -36,6 +38,28 @@ export default function Vraag6() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const checkEmailExists = async (email: string): Promise<boolean> => {
+    if (!isSupabaseAvailable()) return false;
+    
+    try {
+      const { data, error } = await supabase!
+        .from('enquete_antwoorden')
+        .select('email')
+        .eq('email', email)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error checking email:', error);
+        return false;
+      }
+      
+      return !!data; // true als email bestaat, false als niet
+    } catch (err) {
+      console.error('Error checking email:', err);
+      return false;
+    }
+  };
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -56,10 +80,28 @@ export default function Vraag6() {
     }
   };
 
-  const handleVerzenden = () => {
-    if (validateForm()) {
-      // Alle antwoorden zijn al opgeslagen in context
+  const handleVerzenden = async () => {
+    if (!validateForm()) return;
+    
+    setIsCheckingEmail(true);
+    
+    try {
+      // Controleer of email al bestaat
+      const emailExists = await checkEmailExists(formData.email);
+      
+      if (emailExists) {
+        setErrors({ email: 'Dit emailadres is al gebruikt voor een eerdere enquête.' });
+        setIsCheckingEmail(false);
+        return;
+      }
+      
+      // Email is uniek, ga door naar bedankt pagina
       router.push('/enquete/bedankt');
+    } catch (err) {
+      console.error('Error during submission:', err);
+      setErrors({ email: 'Er is een fout opgetreden. Probeer het opnieuw.' });
+    } finally {
+      setIsCheckingEmail(false);
     }
   };
 
@@ -128,9 +170,14 @@ export default function Vraag6() {
       
       <button
         onClick={handleVerzenden}
-        className="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors min-h-[48px] w-full"
+        disabled={isCheckingEmail}
+        className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] w-full ${
+          isCheckingEmail
+            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            : 'bg-blue-500 text-white hover:bg-blue-600'
+        }`}
       >
-        Verzenden
+        {isCheckingEmail ? 'Bezig met controleren...' : 'Verzenden'}
       </button>
     </div>
   );

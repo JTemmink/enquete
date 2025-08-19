@@ -16,8 +16,10 @@ interface EnqueteAntwoorden {
 
 interface EnqueteContextType {
   antwoorden: EnqueteAntwoorden;
+  isSubmitted: boolean;
   updateAnswer: (field: keyof EnqueteAntwoorden, value: EnqueteAntwoorden[keyof EnqueteAntwoorden]) => void;
   resetAntwoorden: () => void;
+  setSubmitted: (submitted: boolean) => void;
 }
 
 const EnqueteContext = createContext<EnqueteContextType | undefined>(undefined);
@@ -36,6 +38,7 @@ const initialAntwoorden: EnqueteAntwoorden = {
 
 export function EnqueteProvider({ children }: { children: ReactNode }) {
   const [antwoorden, setAntwoorden] = useState<EnqueteAntwoorden>(initialAntwoorden);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const updateAnswer = (field: keyof EnqueteAntwoorden, value: EnqueteAntwoorden[keyof EnqueteAntwoorden]) => {
     setAntwoorden(prev => ({
@@ -46,10 +49,15 @@ export function EnqueteProvider({ children }: { children: ReactNode }) {
 
   const resetAntwoorden = () => {
     setAntwoorden(initialAntwoorden);
+    setIsSubmitted(false);
+  };
+
+  const setSubmitted = (submitted: boolean) => {
+    setIsSubmitted(submitted);
   };
 
   return (
-    <EnqueteContext.Provider value={{ antwoorden, updateAnswer, resetAntwoorden }}>
+    <EnqueteContext.Provider value={{ antwoorden, isSubmitted, updateAnswer, resetAntwoorden, setSubmitted }}>
       {children}
     </EnqueteContext.Provider>
   );
