@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import { useState } from 'react';
 
+type ProductKey = 'croissant' | 'stokbrood' | 'pistolet' | 'halfBrood' | 'hardeBroodjes' | 'zachteBroodjes';
+
 export default function Vraag2() {
   const router = useRouter();
   const { updateAnswer } = useEnquete();
@@ -16,7 +18,7 @@ export default function Vraag2() {
     zachteBroodjes: 0,
   });
 
-  const handleInputChange = (product: string, value: number) => {
+  const handleInputChange = (product: ProductKey, value: number) => {
     setBestellingen(prev => ({
       ...prev,
       [product]: Math.max(0, value),
@@ -55,8 +57,8 @@ export default function Vraag2() {
               min="0"
               max="99"
               step="1"
-              value={bestellingen[product]}
-              onChange={(e) => handleInputChange(product, parseInt(e.target.value) || 0)}
+              value={bestellingen[product as ProductKey]}
+              onChange={(e) => handleInputChange(product as ProductKey, parseInt(e.target.value) || 0)}
               onFocus={handleFocus}
               className="w-20 px-4 py-3 border border-gray-300 rounded-lg text-center text-lg"
               inputMode="numeric"
