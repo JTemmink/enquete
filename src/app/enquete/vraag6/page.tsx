@@ -3,51 +3,126 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import Button from '@/components/Button';
+import { useState } from 'react';
 
 export default function Vraag6() {
   const router = useRouter();
-  const { antwoorden } = useEnquete();
+  const { antwoorden, updateAnswer } = useEnquete();
+  const [formData, setFormData] = useState({
+    voornaam: antwoorden.voornaam || '',
+    achternaam: antwoorden.achternaam || '',
+    email: antwoorden.email || '',
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleSubmit = () => {
-    // Stuur direct door naar bedankt pagina
-    router.push('/enquete/bedankt');
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.voornaam.trim()) {
+      newErrors.voornaam = 'Voornaam is verplicht';
+    }
+    
+    if (!formData.achternaam.trim()) {
+      newErrors.achternaam = 'Achternaam is verplicht';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is verplicht';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Voer een geldig emailadres in';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+    
+    // Update context
+    updateAnswer(field as keyof typeof antwoorden, value);
+    
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({
+        ...prev,
+        [field]: '',
+      }));
+    }
+  };
+
+  const handleVerzenden = () => {
+    if (validateForm()) {
+      // Stuur door naar bedankt pagina
+      router.push('/enquete/bedankt');
+    }
   };
 
   return (
     <div className="flex flex-col items-center text-center">
       <h1 className="text-xl font-semibold mb-6 text-gray-800">
-        Bedankt voor het invullen van de enquête!
+        Nu heb ik alleen uw contactgegevens nog nodig
       </h1>
       
-      <div className="bg-gray-50 p-6 rounded-lg mb-6 w-full">
-        <h2 className="text-lg font-medium mb-4 text-gray-700">Samenvatting van uw antwoorden:</h2>
-        <div className="text-left space-y-2 text-gray-600">
-          <p><strong>Interesse:</strong> {antwoorden.interesse ? 'Ja' : 'Nee'}</p>
-          {antwoorden.bestellingen && (
-            <div>
-              <strong>Bestellingen:</strong>
-              <ul className="ml-4 mt-1">
-                {Object.entries(antwoorden.bestellingen).map(([product, amount]) => (
-                  <li key={product}>
-                    {product === 'halfBrood' ? 'Half brood' : 
-                     product === 'hardeBroodjes' ? 'Harde broodjes' :
-                     product === 'zachteBroodjes' ? 'Zachte broodjes' :
-                     product}: {amount}
-                  </li>
-                ))}
-              </ul>
-            </div>
+      <p className="text-lg mb-6 text-gray-700">
+        We zullen alleen contact opnemen als we van start gaan of om uw eventuele vragen te beantwoorden.
+      </p>
+      
+      <div className="w-full space-y-4 mb-6">
+        <div>
+          <input
+            type="text"
+            placeholder="Voornaam *"
+            value={formData.voornaam}
+            onChange={(e) => handleInputChange('voornaam', e.target.value)}
+            className={`w-full px-4 py-3 border rounded-lg text-center text-lg transition-colors ${
+              errors.voornaam ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+            }`}
+          />
+          {errors.voornaam && (
+            <p className="text-red-500 text-sm mt-1 text-left">{errors.voornaam}</p>
           )}
-          <p><strong>Tijd:</strong> {antwoorden.tijd}</p>
-          <p><strong>Adres:</strong> {antwoorden.straat} {antwoorden.huisnummer}</p>
+        </div>
+        
+        <div>
+          <input
+            type="text"
+            placeholder="Achternaam *"
+            value={formData.achternaam}
+            onChange={(e) => handleInputChange('achternaam', e.target.value)}
+            className={`w-full px-4 py-3 border rounded-lg text-center text-lg transition-colors ${
+              errors.achternaam ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+            }`}
+          />
+          {errors.achternaam && (
+            <p className="text-red-500 text-sm mt-1 text-left">{errors.achternaam}</p>
+          )}
+        </div>
+        
+        <div>
+          <input
+            type="email"
+            placeholder="Emailadres *"
+            value={formData.email}
+            onChange={(e) => handleInputChange('email', e.target.value)}
+            className={`w-full px-4 py-3 border rounded-lg text-center text-lg transition-colors ${
+              errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200'
+            }`}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1 text-left">{errors.email}</p>
+          )}
         </div>
       </div>
       
       <Button
-        onClick={handleSubmit}
+        onClick={handleVerzenden}
         className="w-full"
       >
-        Enquête versturen
+        Verzenden
       </Button>
     </div>
   );
