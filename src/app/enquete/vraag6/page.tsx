@@ -14,6 +14,7 @@ export default function Vraag6() {
     email: antwoorden.email || '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -54,10 +55,43 @@ export default function Vraag6() {
     }
   };
 
-  const handleVerzenden = () => {
-    if (validateForm()) {
-      // Stuur door naar bedankt pagina
-      router.push('/enquete/bedankt');
+  const handleVerzenden = async () => {
+    if (!validateForm()) return;
+    
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/submit-enquete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...antwoorden,
+          voornaam: formData.voornaam,
+          achternaam: formData.achternaam,
+          email: formData.email,
+        }),
+      });
+
+      if (response.ok) {
+        // Stuur door naar bedankt pagina
+        router.push('/enquete/bedankt');
+      } else {
+        const errorData = await response.json();
+        console.error('API Error:', errorData);
+        
+        if (errorData.error === 'Dit emailadres is al gebruikt voor een eerdere enquête') {
+          setErrors({ email: errorData.error });
+        } else {
+          alert('Er is een fout opgetreden bij het versturen van de enquête. Probeer het opnieuw.');
+        }
+      }
+    } catch (error) {
+      console.error('Network Error:', error);
+      alert('Er is een netwerkfout opgetreden. Controleer je internetverbinding en probeer het opnieuw.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -120,9 +154,10 @@ export default function Vraag6() {
       
       <Button
         onClick={handleVerzenden}
+        disabled={isSubmitting}
         className="w-full"
       >
-        Verzenden
+        {isSubmitting ? 'Bezig met versturen...' : 'Verzenden'}
       </Button>
     </div>
   );
