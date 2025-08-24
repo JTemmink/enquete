@@ -6,26 +6,11 @@ import Button from '@/components/Button';
 
 export default function Vraag6() {
   const router = useRouter();
-  const { antwoorden, updateAnswer } = useEnquete();
+  const { antwoorden } = useEnquete();
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch('/api/submit-enquete', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(antwoorden),
-      });
-
-      if (response.ok) {
-        router.push('/enquete/bedankt');
-      } else {
-        console.error('Fout bij het versturen van de enquête');
-      }
-    } catch (error) {
-      console.error('Fout bij het versturen van de enquête:', error);
-    }
+  const handleSubmit = () => {
+    // Stuur direct door naar bedankt pagina
+    router.push('/enquete/bedankt');
   };
 
   return (
