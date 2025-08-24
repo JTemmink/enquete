@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import Button from '@/components/Button';
+import { useEffect } from 'react';
 
 export default function Vraag1() {
   const router = useRouter();
@@ -16,13 +17,14 @@ export default function Vraag1() {
     updateAnswer('interesse', false);
   };
 
-  const handleVolgende = () => {
+  // Automatisch doorsturen zodra er een keuze is gemaakt
+  useEffect(() => {
     if (antwoorden.interesse === true) {
       router.push('/enquete/vraag2');
     } else if (antwoorden.interesse === false) {
       router.push('/enquete/bedankt-nee');
     }
-  };
+  }, [antwoorden.interesse, router]);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -30,7 +32,7 @@ export default function Vraag1() {
         Zou u interesse hebben in een thuisgebracht lekker ontbijt, brunch of lunch, vers van de bakker op de zondag morgen?
       </h1>
       
-      <div className="flex flex-col gap-4 w-full mb-6">
+      <div className="flex flex-col gap-4 w-full">
         <Button
           onClick={handleJa}
           className={`w-full ${
@@ -53,14 +55,6 @@ export default function Vraag1() {
           Nee
         </Button>
       </div>
-      
-      <Button
-        onClick={handleVolgende}
-        disabled={antwoorden.interesse === null}
-        className="w-full"
-      >
-        Volgende
-      </Button>
     </div>
   );
 }

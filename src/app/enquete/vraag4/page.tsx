@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import Button from '@/components/Button';
+import { useEffect } from 'react';
 
 export default function Vraag4() {
   const router = useRouter();
@@ -14,11 +15,12 @@ export default function Vraag4() {
     updateAnswer('straat', straat);
   };
 
-  const handleVolgende = () => {
+  // Automatisch doorsturen zodra er een straat is geselecteerd
+  useEffect(() => {
     if (antwoorden.straat) {
       router.push('/enquete/vraag5');
     }
-  };
+  }, [antwoorden.straat, router]);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -26,7 +28,7 @@ export default function Vraag4() {
         In welke straat woont u?
       </h1>
       
-      <div className="flex flex-col gap-3 w-full mb-6">
+      <div className="flex flex-col gap-3 w-full">
         {straten.map((straat) => (
           <Button
             key={straat}
@@ -41,14 +43,6 @@ export default function Vraag4() {
           </Button>
         ))}
       </div>
-      
-      <Button
-        onClick={handleVolgende}
-        disabled={!antwoorden.straat}
-        className="w-full"
-      >
-        Volgende
-      </Button>
     </div>
   );
 }
