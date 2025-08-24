@@ -2,42 +2,16 @@
 
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
-import { useState } from 'react';
+import Button from '@/components/Button';
 
 export default function Vraag5() {
   const router = useRouter();
   const { antwoorden, updateAnswer } = useEnquete();
-  const [huisnummer, setHuisnummer] = useState<string>('');
 
-  const handleInputChange = (value: string) => {
-    if (value === '') {
-      setHuisnummer('');
-      updateAnswer('huisnummer', null);
-    } else {
-      const num = parseInt(value);
-      if (!isNaN(num) && num > 0) {
-        setHuisnummer(value);
-        updateAnswer('huisnummer', num);
-      } else {
-        setHuisnummer(value);
-        updateAnswer('huisnummer', null);
-      }
-    }
-  };
+  const huizen = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
 
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    // Selecteer automatisch alle tekst wanneer je op het veld klikt
-    if (event.target.value) {
-      event.target.select();
-    }
-  };
-
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    // Als het veld leeg is na blur, reset dan de state
-    if (event.target.value === '') {
-      setHuisnummer('');
-      updateAnswer('huisnummer', null);
-    }
+  const handleHuisSelectie = (huis: string) => {
+    updateAnswer('huisnummer', parseInt(huis));
   };
 
   const handleVolgende = () => {
@@ -49,37 +23,32 @@ export default function Vraag5() {
   return (
     <div className="flex flex-col items-center text-center">
       <h1 className="text-xl font-semibold mb-6 text-gray-800">
-        Wat is uw huisnummer?
+        Welk huisnummer heeft u?
       </h1>
       
-      <div className="w-full mb-6">
-        <input
-          type="text"
-          min="1"
-          max="9999"
-          step="1"
-          value={huisnummer}
-          onChange={(e) => handleInputChange(e.target.value)}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          placeholder="Voer huisnummer in"
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg"
-          inputMode="numeric"
-          pattern="[0-9]*"
-        />
+      <div className="grid grid-cols-5 gap-2 w-full mb-6">
+        {huizen.map((huis) => (
+          <Button
+            key={huis}
+            onClick={() => handleHuisSelectie(huis)}
+            className={`${
+              antwoorden.huisnummer === parseInt(huis)
+                ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-700 hover:via-blue-600 hover:to-blue-700'
+                : 'bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 hover:from-gray-400 hover:via-gray-300 hover:to-gray-400 text-gray-700'
+            }`}
+          >
+            {huis}
+          </Button>
+        ))}
       </div>
       
-      <button
+      <Button
         onClick={handleVolgende}
         disabled={!antwoorden.huisnummer}
-        className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] w-full ${
-          !antwoorden.huisnummer
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
+        className="w-full"
       >
         Volgende
-      </button>
+      </Button>
     </div>
   );
 }

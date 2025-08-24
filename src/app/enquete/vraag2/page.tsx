@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import { useState } from 'react';
+import Button from '@/components/Button';
 
 type ProductKey = 'croissant' | 'stokbrood' | 'pistolet' | 'halfBrood' | 'hardeBroodjes' | 'zachteBroodjes';
 
@@ -68,12 +69,12 @@ export default function Vraag2() {
         ))}
       </div>
       
-      <button
+      <Button
         onClick={handleVolgende}
-        className="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors min-h-[48px] w-full"
+        className="w-full"
       >
         Volgende
-      </button>
+      </Button>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
+import Button from '@/components/Button';
 
 export default function Vraag1() {
   const router = useRouter();
@@ -30,40 +31,36 @@ export default function Vraag1() {
       </h1>
       
       <div className="flex flex-col gap-4 w-full mb-6">
-        <button
+        <Button
           onClick={handleJa}
-          className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] ${
+          className={`w-full ${
             antwoorden.interesse === true
-              ? 'bg-green-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              ? 'bg-gradient-to-r from-green-600 via-green-500 to-green-600 hover:from-green-700 hover:via-green-600 hover:to-green-700'
+              : 'bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 hover:from-gray-400 hover:via-gray-300 hover:to-gray-400 text-gray-700'
           }`}
         >
           Ja
-        </button>
+        </Button>
         
-        <button
+        <Button
           onClick={handleNee}
-          className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] ${
+          className={`w-full ${
             antwoorden.interesse === false
-              ? 'bg-red-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              ? 'bg-gradient-to-r from-red-600 via-red-500 to-red-600 hover:from-red-700 hover:via-red-600 hover:to-red-700'
+              : 'bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 hover:from-gray-400 hover:via-gray-300 hover:to-gray-400 text-gray-700'
           }`}
         >
           Nee
-        </button>
+        </Button>
       </div>
       
-      <button
+      <Button
         onClick={handleVolgende}
         disabled={antwoorden.interesse === null}
-        className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] w-full ${
-          antwoorden.interesse === null
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
+        className="w-full"
       >
         Volgende
-      </button>
+      </Button>
     </div>
   );
 }

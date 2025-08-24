@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
+import Button from '@/components/Button';
 
 export default function Vraag4() {
   const router = useRouter();
@@ -27,31 +28,27 @@ export default function Vraag4() {
       
       <div className="flex flex-col gap-3 w-full mb-6">
         {straten.map((straat) => (
-          <button
+          <Button
             key={straat}
             onClick={() => handleStraatSelectie(straat)}
-            className={`py-3 px-4 rounded-lg transition-colors min-h-[48px] ${
+            className={`${
               antwoorden.straat === straat
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-700 hover:via-blue-600 hover:to-blue-700'
+                : 'bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 hover:from-gray-400 hover:via-gray-300 hover:to-gray-400 text-gray-700'
             }`}
           >
             {straat}
-          </button>
+          </Button>
         ))}
       </div>
       
-      <button
+      <Button
         onClick={handleVolgende}
         disabled={!antwoorden.straat}
-        className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] w-full ${
-          !antwoorden.straat
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
+        className="w-full"
       >
         Volgende
-      </button>
+      </Button>
     </div>
   );
 }

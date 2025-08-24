@@ -1,87 +1,26 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-  --background: #f7ecd7;
-  --foreground: #1c1917;
-  --primary: #f0a23a;
-  --primary-hover: #e68a1f;
-  --secondary: #a67f4f;
-  --accent: #f4bc6a;
-  --muted: #fafaf9;
-  --muted-foreground: #78716c;
-  --border: #e7e5e4;
-  --input: #fafaf9;
-  --ring: #f0a23a;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  --background: #F7ECD7;
+  --foreground: #171717;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-error: var(--error);
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-poppins);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1c1917;
-    --foreground: #fafaf9;
-    --muted: #292524;
-    --muted-foreground: #a8a29e;
-    --border: #44403c;
-    --input: #292524;
+    --background: #F7ECD7;
+    --foreground: #171717;
   }
-}
-
-* {
-  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-  font-variation-settings: normal;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Typography utilities */
-.font-display {
-  font-family: 'Poppins', 'Inter', system-ui, sans-serif;
-}
-
-/* Smooth transitions */
-* {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-/* Focus styles */
-*:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-/* Selection styles */
-::selection {
-  background-color: var(--primary);
-  color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
+import Button from '@/components/Button';
 
 export default function Vraag3() {
   const router = useRouter();
@@ -27,31 +28,27 @@ export default function Vraag3() {
       
       <div className="grid grid-cols-2 gap-3 w-full mb-6">
         {tijden.map((tijd) => (
-          <button
+          <Button
             key={tijd}
             onClick={() => handleTijdSelectie(tijd)}
-            className={`py-3 px-4 rounded-lg transition-colors min-h-[48px] ${
+            className={`${
               antwoorden.tijd === tijd
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-700 hover:via-blue-600 hover:to-blue-700'
+                : 'bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 hover:from-gray-400 hover:via-gray-300 hover:to-gray-400 text-gray-700'
             }`}
           >
             {tijd}
-          </button>
+          </Button>
         ))}
       </div>
       
-      <button
+      <Button
         onClick={handleVolgende}
         disabled={!antwoorden.tijd}
-        className={`py-3 px-6 rounded-lg transition-colors min-h-[48px] w-full ${
-          !antwoorden.tijd
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
+        className="w-full"
       >
         Volgende
-      </button>
+      </Button>
     </div>
   );
 }
