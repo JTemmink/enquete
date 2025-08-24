@@ -11,7 +11,7 @@ export default function OverMij() {
         </p>
         
         <p>
-          Omdat de meeste bakkers in de stad op zondag dicht zijn, wil ik in samenwerking met een bakker die wel op zondag open is broodjes gewoon aan jou deur te bezorgen. Geen gedoe, alleen maar genieten van een heerlijke start van je dag! Ik ben benieuwd of jullie dit ook zo'n tof idee vinden, dus vul mijn korte enquête in op de website en laat het me weten!
+          Omdat de meeste bakkers in de stad op zondag dicht zijn, wil ik in samenwerking met een bakker die wel op zondag open is broodjes gewoon aan jou deur te bezorgen. Geen gedoe, alleen maar genieten van een heerlijke start van je dag! Ik ben benieuwd of jullie dit ook zo&apos;n tof idee vinden, dus vul mijn korte enquête in op de website en laat het me weten!
         </p>
       </div>
 
