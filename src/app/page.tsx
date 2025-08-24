@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className="max-w-md mx-auto p-4 flex flex-col items-center text-center">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
-        Welkom bij Bakkeraandedeur
+        Welkom bij Bakker aan de deur!
       </h1>
       
       <p className="text-lg mb-8 text-gray-700 leading-relaxed">
