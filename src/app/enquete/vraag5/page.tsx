@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import Button from '@/components/Button';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function Vraag5() {
   const router = useRouter();
@@ -29,12 +29,11 @@ export default function Vraag5() {
     }
   };
 
-  // Automatisch doorsturen zodra er een geldig huisnummer is ingevoerd
-  useEffect(() => {
+  const handleVolgende = () => {
     if (antwoorden.huisnummer && antwoorden.huisnummer > 0) {
       router.push('/enquete/vraag6');
     }
-  }, [antwoorden.huisnummer, router]);
+  };
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -59,9 +58,17 @@ export default function Vraag5() {
         />
       </div>
       
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-sm text-gray-600 mb-6">
         Voer uw huisnummer in (alleen cijfers)
       </p>
+      
+      <Button
+        onClick={handleVolgende}
+        disabled={!antwoorden.huisnummer || antwoorden.huisnummer <= 0}
+        className="w-full"
+      >
+        Volgende
+      </Button>
     </div>
   );
 }

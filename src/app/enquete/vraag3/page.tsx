@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import Button from '@/components/Button';
+import { useEffect } from 'react';
 
 export default function Vraag3() {
   const router = useRouter();
@@ -14,11 +15,12 @@ export default function Vraag3() {
     updateAnswer('tijd', tijd);
   };
 
-  const handleVolgende = () => {
+  // Automatisch doorsturen zodra er een tijd is geselecteerd
+  useEffect(() => {
     if (antwoorden.tijd) {
       router.push('/enquete/vraag4');
     }
-  };
+  }, [antwoorden.tijd, router]);
 
   return (
     <div className="flex flex-col items-center text-center">
@@ -26,7 +28,7 @@ export default function Vraag3() {
         Voor welke tijd wilt u de broodjes uiterlijk hebben?
       </h1>
       
-      <div className="grid grid-cols-2 gap-3 w-full mb-6">
+      <div className="grid grid-cols-2 gap-3 w-full">
         {tijden.map((tijd) => (
           <Button
             key={tijd}
@@ -41,14 +43,6 @@ export default function Vraag3() {
           </Button>
         ))}
       </div>
-      
-      <Button
-        onClick={handleVolgende}
-        disabled={!antwoorden.tijd}
-        className="w-full"
-      >
-        Volgende
-      </Button>
     </div>
   );
 }
