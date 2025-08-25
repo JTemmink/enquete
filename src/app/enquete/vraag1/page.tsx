@@ -29,7 +29,7 @@ export default function Vraag1() {
   return (
     <div className="flex flex-col items-center text-center">
       <h1 className="text-xl font-semibold mb-6 text-gray-800">
-        Zou u interesse hebben in een thuisgebracht lekker ontbijt, brunch of lunch, vers van de bakker op de zondag morgen?
+        Zou u interesse hebben in thuisgebrachte lekkere broodjes voor ontbijt, brunch of lunch, vers van de bakker op de zondag morgen?
       </h1>
       
       <div className="flex flex-col gap-4 w-full">
