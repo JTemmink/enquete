@@ -5,6 +5,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 interface EnqueteAntwoorden {
   interesse: boolean | null;
   bestellingen: Record<string, number> | null;
+  frequentie: string | null;
   tijd: string | null;
   straat: string | null;
   huisnummer: number | null;
@@ -27,6 +28,7 @@ const EnqueteContext = createContext<EnqueteContextType | undefined>(undefined);
 const initialAntwoorden: EnqueteAntwoorden = {
   interesse: null,
   bestellingen: null,
+  frequentie: null,
   tijd: null,
   straat: null,
   huisnummer: null,

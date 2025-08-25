@@ -63,6 +63,7 @@ export async function POST(request: NextRequest) {
       .insert({
         interesse: body.interesse,
         bestellingen: body.bestellingen,
+        frequentie: body.frequentie,
         tijd: body.tijd,
         straat: body.straat,
         huisnummer: body.huisnummer,
