@@ -27,18 +27,18 @@ export default function Home() {
       )}
 
       <div className="flex flex-col sm:flex-row gap-4 w-full">
+        <Link href="/over-mij">
+          <Button className="w-full bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 hover:from-gray-700 hover:via-gray-600 hover:to-gray-700">
+            Over mij en dit project
+          </Button>
+        </Link>
+        
         <Link href="/enquete/vraag1">
           <Button 
             disabled={!hasSupabaseConfig}
             className="w-full"
           >
             {hasSupabaseConfig ? 'Enquête beginnen' : 'Enquête (niet beschikbaar)'}
-          </Button>
-        </Link>
-        
-        <Link href="/over-mij">
-          <Button className="w-full bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600 hover:from-gray-700 hover:via-gray-600 hover:to-gray-700">
-            Over mij en dit project
           </Button>
         </Link>
       </div>

@@ -9,43 +9,37 @@ export default function Vraag3() {
   const router = useRouter();
   const { antwoorden, updateAnswer } = useEnquete();
 
-  const frequenties = [
-    'Elke week',
-    'Elke 2 weken', 
-    'Elke 3 weken',
-    'Elke 4 weken',
-    'Enkele keer per jaar'
-  ];
+  const tijden = ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30'];
 
-  const handleFrequentieSelectie = (frequentie: string) => {
-    updateAnswer('frequentie', frequentie);
+  const handleTijdSelectie = (tijd: string) => {
+    updateAnswer('tijd', tijd);
   };
 
-  // Automatisch doorsturen zodra er een frequentie is geselecteerd
+  // Automatisch doorsturen zodra er een tijd is geselecteerd
   useEffect(() => {
-    if (antwoorden.frequentie) {
+    if (antwoorden.tijd) {
       router.push('/enquete/vraag4');
     }
-  }, [antwoorden.frequentie, router]);
+  }, [antwoorden.tijd, router]);
 
   return (
     <div className="flex flex-col items-center text-center">
       <h1 className="text-xl font-semibold mb-6 text-gray-800 px-4">
-        Hoe vaak denkt u te gaan bestellen?
+        Voor welke tijd wilt u de broodjes uiterlijk hebben?
       </h1>
       
-      <div className="flex flex-col gap-3 w-full px-4">
-        {frequenties.map((frequentie) => (
+      <div className="grid grid-cols-2 gap-3 w-full px-4">
+        {tijden.map((tijd) => (
           <Button
-            key={frequentie}
-            onClick={() => handleFrequentieSelectie(frequentie)}
+            key={tijd}
+            onClick={() => handleTijdSelectie(tijd)}
             className={`${
-              antwoorden.frequentie === frequentie
+              antwoorden.tijd === tijd
                 ? 'bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 hover:from-blue-700 hover:via-blue-600 hover:to-blue-700'
                 : 'bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 hover:from-gray-400 hover:via-gray-300 hover:to-gray-400 text-gray-700'
             }`}
           >
-            {frequentie}
+            {tijd}
           </Button>
         ))}
       </div>
