@@ -95,6 +95,17 @@ export default function Vraag6() {
     }
   };
 
+  const getProductDisplayName = (product: string) => {
+    switch (product) {
+      case 'halfBrood':
+        return 'Half brood';
+      case 'hardeZachteBroodjes':
+        return 'Harde/zachte broodjes, krentenbollen, e.d.';
+      default:
+        return product;
+    }
+  };
+
   return (
     <div className="flex flex-col items-center text-center">
       <h1 className="text-xl font-semibold mb-6 text-gray-800">
