@@ -7,16 +7,37 @@ export async function POST(request: NextRequest) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
+    console.log('Environment variables check:', {
+      supabaseUrl: supabaseUrl ? 'Set' : 'Missing',
+      supabaseAnonKey: supabaseAnonKey ? 'Set' : 'Missing',
+      urlLength: supabaseUrl?.length || 0,
+      keyLength: supabaseAnonKey?.length || 0
+    });
+    
     if (!supabaseUrl || !supabaseAnonKey) {
       console.error('Missing Supabase environment variables');
+      console.error('Supabase URL:', supabaseUrl);
+      console.error('Supabase Anon Key:', supabaseAnonKey ? 'Present' : 'Missing');
       return NextResponse.json(
-        { error: 'Server configuratie fout' },
+        { error: 'Server configuratie fout - environment variables ontbreken' },
         { status: 500 }
       );
     }
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
     const body = await request.json();
+    
+    console.log('Request body received:', {
+      interesse: body.interesse,
+      bestellingen: body.bestellingen ? 'Present' : 'Missing',
+      frequentie: body.frequentie,
+      tijd: body.tijd,
+      straat: body.straat,
+      huisnummer: body.huisnummer,
+      voornaam: body.voornaam,
+      achternaam: body.achternaam,
+      email: body.email
+    });
     
     // Valideer verplichte velden
     if (!body.voornaam || !body.achternaam || !body.email) {
@@ -78,10 +99,12 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Supabase error:', error);
       return NextResponse.json(
-        { error: 'Fout bij opslaan van enquête' },
+        { error: 'Fout bij opslaan van enquête: ' + error.message },
         { status: 500 }
       );
     }
+
+    console.log('Enquête succesvol opgeslagen:', data);
 
     return NextResponse.json({ 
       success: true, 
@@ -92,7 +115,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Server error:', error);
     return NextResponse.json(
-      { error: 'Interne server fout' },
+      { error: 'Interne server fout: ' + (error as Error).message },
       { status: 500 }
     );
   }
