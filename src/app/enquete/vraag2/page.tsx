@@ -5,7 +5,7 @@ import { useEnquete } from '@/contexts/EnqueteContext';
 import { useState } from 'react';
 import Button from '@/components/Button';
 
-type ProductKey = 'croissant' | 'stokbrood' | 'pistolet' | 'halfBrood' | 'hardeZachteBroodjes';
+type ProductKey = 'croissant' | 'stokbrood' | 'pistolet' | 'hardeZachteBroodjes' | 'halfBrood';
 
 export default function Vraag2() {
   const router = useRouter();
@@ -14,8 +14,8 @@ export default function Vraag2() {
     croissant: 0,
     stokbrood: 0,
     pistolet: 0,
-    halfBrood: 0,
     hardeZachteBroodjes: 0,
+    halfBrood: 0,
   });
 
   const handleInputChange = (product: ProductKey, value: number) => {
@@ -46,12 +46,12 @@ export default function Vraag2() {
       <div className="w-full space-y-4 mb-6 px-4">
         {Object.entries(bestellingen).map(([product, amount]) => (
           <div key={product} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <label className="text-gray-700 capitalize text-sm sm:text-base sm:flex-1">
+            <label className="text-gray-700 capitalize text-base sm:text-lg font-semibold sm:flex-1 text-center sm:text-left">
               {product === 'halfBrood' ? 'Half brood' : 
                product === 'hardeZachteBroodjes' ? 'Harde/zachte broodjes, krentenbollen, e.d.' :
                product}
             </label>
-            <div className="flex items-center gap-2 sm:w-32">
+            <div className="flex items-center justify-center sm:justify-end gap-2 sm:w-32">
               <button
                 onClick={() => handleInputChange(product as ProductKey, Math.max(0, amount - 1))}
                 className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold text-lg flex items-center justify-center transition-colors"
