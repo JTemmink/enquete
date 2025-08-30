@@ -26,5 +26,5 @@ Volgende vraag: "Nu heb ik alleen uw contact gegevens nog nodig, we zullen allee
 Dan moet om de volgende gegevens worden gevraagd" "Voornaam", "Achternaam", "emailadres", "telefoonnummer(optioneel)"
 daaronder de knop 'Verzenden'
 
-Daarna komt een scherm met de tekst "Dank u wel voor het invullen van de enquete! Ik laat het u weten wanneer we van start kunnen gaan met de eerste bezorging! Heeft u nog vragen of opmerkingen dan kunt u deze stellen op broodaandedeur@gmail.com
+Daarna komt een scherm met de tekst "Dank u wel voor het invullen van de enquete! Ik laat het u weten wanneer we van start kunnen gaan met de eerste bezorging! Heeft u nog vragen of opmerkingen dan kunt u deze stellen op bakkeraandedeurnijmegen@gmail.com
 

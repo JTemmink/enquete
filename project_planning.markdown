@@ -105,7 +105,7 @@ Dit document biedt een gedetailleerde, stap-voor-stap planning voor het ontwikke
   - [x] Voeg "Verzenden" button toe, sla alle antwoorden op in Supabase, navigeer naar `/enquete/bedankt`.
   - [x] Voeg error handling toe (alert bij falen).
 - [x] Bedankt (`/app/enquete/bedankt/page.tsx`):
-  - [x] Toon tekst: "Dank u wel voor het invullen van de enquête! Ik laat het u weten wanneer we van start kunnen gaan met de eerste bezorging! Heeft u nog vragen of opmerkingen dan kunt u deze stellen op broodaandedeur@gmail.com" (email als link).
+  - [x] Toon tekst: "Dank u wel voor het invullen van de enquête! Ik laat het u weten wanneer we van start kunnen gaan met de eerste bezorging! Heeft u nog vragen of opmerkingen dan kunt u deze stellen op bakkeraandedeurnijmegen@gmail.com" (email als link).
   - [x] Gebruik `max-w-md` voor centrering.
 
 ### Fase 4: Mobiele Optimalisatie en Testen

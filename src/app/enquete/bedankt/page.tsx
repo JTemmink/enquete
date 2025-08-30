@@ -18,7 +18,7 @@ export default function Bedankt() {
       <p className="text-base mb-8 text-gray-600">
         Heeft u vragen, opmerkingen of ideeën? Neem dan contact op via{' '}
         <a 
-          href="mailto:bakkeraandedeur@gmail.com" 
+          href="mailto:bakkeraandedeurnijmegen@gmail.com" 
           className="text-blue-600 hover:text-blue-800 underline font-medium"
         >
           bakkeraandedeur@gmail.com
