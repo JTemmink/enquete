@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEnquete } from '@/contexts/EnqueteContext';
 import Button from '@/components/Button';
 import { useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function Vraag1() {
   const router = useRouter();
@@ -13,8 +14,30 @@ export default function Vraag1() {
     updateAnswer('interesse', true);
   };
 
-  const handleNee = () => {
+  const handleNee = async () => {
     updateAnswer('interesse', false);
+    
+    // Direct naar Supabase sturen wanneer iemand 'nee' kiest
+    try {
+      const { error } = await supabase
+        .from('enquete_antwoorden')
+        .insert([
+          {
+            interesse: false,
+            voornaam: 'Nee respondent',
+            achternaam: 'Enquete',
+            email: `nee-${Date.now()}@enquete.local`
+          }
+        ]);
+
+      if (error) {
+        console.error('Error saving to Supabase:', error);
+      } else {
+        console.log('Nee response saved to Supabase successfully');
+      }
+    } catch (error) {
+      console.error('Error saving to Supabase:', error);
+    }
   };
 
   // Automatisch doorsturen zodra er een keuze is gemaakt
@@ -29,7 +52,7 @@ export default function Vraag1() {
   return (
     <div className="flex flex-col items-center text-center">
       <h1 className="text-xl font-semibold mb-6 text-gray-800">
-        Zou u interesse hebben in thuisgebrachte lekkere broodjes voor ontbijt, brunch of lunch, vers van de bakker op de zondag morgen?
+        Zou u (zo nu en dan) interesse hebben in thuisgebrachte lekkere broodjes voor ontbijt, brunch of lunch, vers van de bakker op de zondag morgen?
       </h1>
       
       <div className="flex flex-col gap-4 w-full">
